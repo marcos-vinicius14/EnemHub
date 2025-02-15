@@ -23,8 +23,8 @@ public class QuestionModel {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "index")
-    private int index;
+    @Column(name = "question_index")
+    private int questionIndex;
 
     @Column(name = "year")
     private int year;
