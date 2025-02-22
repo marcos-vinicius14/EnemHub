@@ -20,6 +20,7 @@ public class DatabaseStatusService {
         status.put("activedConnections", databaseStatusRepository.getActivedConnections());
         status.put("maxConnections", databaseStatusRepository.getMaxConnections());
         status.put("databaseStatus", databaseStatusRepository.getDatabaseStatus());
+        status.put("database version", databaseStatusRepository.getDatabaseVersion());
 
         return status;
     }

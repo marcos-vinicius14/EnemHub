@@ -52,4 +52,11 @@ public class DatabaseStatusRepository {
 
     }
 
+    public int getDatabaseVersion() {
+        Query query = entityManager.createNativeQuery("SHOW server_version;");
+        Object result = query.getSingleResult();
+
+        return Integer.parseInt((String) result);
+    }
+
 }
