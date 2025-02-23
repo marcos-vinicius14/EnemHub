@@ -1,6 +1,19 @@
+
 spring:
   datasource:
     url: ${DATABASE_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-
+    driver-class-name: org.postgresql.Driver  # Adicione explicitamente o driver
+  jpa:
+    hibernate:
+      ddl-auto: none  # Não cria tabelas, já que você usa consultas nativas
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # Dialeto específico do PostgreSQL
+  flyway:
+    enabled: false  # Pode manter falso, já que suas consultas não dependem de tabelas
+#logging:
+ # level:
+#    org.springframework: DEBUG  # Para depuração
+    #org.hibernate: DEBUG

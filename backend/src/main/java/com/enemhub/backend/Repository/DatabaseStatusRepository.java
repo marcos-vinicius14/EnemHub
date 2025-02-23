@@ -11,10 +11,11 @@ import java.util.Map;
 
 
 @Repository
-public class DatabaseStatusRepository {
+public class DatabaseStatusRepository implements DatabaseStatusInterface {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public int getActivedConnections() {
         Query query = entityManager.createNativeQuery(
                 "SELECT count(*) FROM pg_stat_activity WHERE datname = current_database() AND state = 'active';");
@@ -22,12 +23,14 @@ public class DatabaseStatusRepository {
         return ((Number) query.getSingleResult()).intValue();
     }
 
-    public int getMaxConnections() {
+    @Override
+    public int getMaxConnection() {
         Query query = entityManager.createNativeQuery("SHOW max_connections");
         Object result = query.getSingleResult();
         return Integer.parseInt((String) result);
     }
 
+    @Override
     public Map<String, Object> getDatabaseStatus() {
         Map<String, Object> status = null;
         try {
@@ -49,10 +52,10 @@ public class DatabaseStatusRepository {
         }
 
         return status;
-
     }
 
-    public float getDatabaseVersion() {
+    @Override
+    public Float getDatabaseVersion() {
         Query query = entityManager.createNativeQuery("SHOW server_version;");
         Object result = query.getSingleResult();
 

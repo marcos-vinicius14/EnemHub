@@ -18,7 +18,7 @@ public class DatabaseStatusService {
     public Map<String, Object> getDatabaseStatus() {
         Map<String, Object> status = new HashMap<>();
         status.put("activedConnections", databaseStatusRepository.getActivedConnections());
-        status.put("maxConnections", databaseStatusRepository.getMaxConnections());
+        status.put("maxConnections", databaseStatusRepository.getMaxConnection());
         status.put("databaseStatus", databaseStatusRepository.getDatabaseStatus());
         status.put("database version", databaseStatusRepository.getDatabaseVersion());
 
