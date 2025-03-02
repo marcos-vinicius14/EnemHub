@@ -7,6 +7,19 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service for retrieving the current status of the database.
+ * This class interacts with {@link DatabaseStatusRepository} to gather information
+ * such as the number of active connections, the maximum allowed connections,
+ * and detailed database status metrics.
+ *
+ * Responsibilities of this service include:
+ * - Fetching the number of active connections to the database.
+ * - Retrieving the maximum allowed connections to the database.
+ * - Obtaining additional status details about the database.
+ *
+ * The collected status information is aggregated and returned as a map.
+ */
 @Service
 public class DatabaseStatusService {
     private final DatabaseStatusRepository databaseStatusRepository;
