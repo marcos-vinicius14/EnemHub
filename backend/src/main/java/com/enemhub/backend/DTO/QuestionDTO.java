@@ -1,9 +1,10 @@
 package com.enemhub.backend.DTO;
 
-import com.enemhub.backend.Model.AlternativeModel;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public record QuestionDTO(
         Long id,
         String title,
@@ -14,6 +15,4 @@ public record QuestionDTO(
         String context,
         String correctAlternative,
         String alternativesIntroduction,
-        List<AlternativeModel> alternatives) {
-
-}
+        List<AlternativeDTO> alternatives) {}
