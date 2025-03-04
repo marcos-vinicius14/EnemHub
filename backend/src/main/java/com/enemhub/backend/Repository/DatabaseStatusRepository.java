@@ -10,6 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Repository for accessing database status information.
+ * This class interacts with the database to retrieve details about the number of active connections,
+ * the maximum allowed connections, and other status metrics.
+ *
+ * It utilizes JPA's EntityManager to execute native SQL queries against the underlying database.
+ */
 @Repository
 public class DatabaseStatusRepository {
     @PersistenceContext

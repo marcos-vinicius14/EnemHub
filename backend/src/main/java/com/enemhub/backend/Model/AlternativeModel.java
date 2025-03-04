@@ -4,7 +4,24 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 
+/**
+ * The AlternativeModel class serves as an entity representing an alternative for a question
+ * in a question-answering system. Alternatives are potential answers associated with questions,
+ * and each alternative can be identified as correct or incorrect. It is mapped to the
+ * "tb_alternative" table in the database.
+ *
+ * This class contains fields for storing the alternative's unique identifier, letter
+ * designation, descriptive text, optional file reference, and correctness indicator.
+ * It is designed to be used in conjunction with the QuestionModel class.
+ *
+ * An AlternativeModel is linked to a specific question through a one-to-many relationship
+ * defined in the QuestionModel class.
+ *
+ * Annotations in this class are used for ORM (Object-Relational Mapping) functionality
+ * as well as validation.
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,6 +33,7 @@ public class AlternativeModel {
     private Long id;
 
     @Column(name = "letter")
+    @NotNull
     private String letter;
 
     @Column(length = 2000, name = "text")
@@ -25,5 +43,6 @@ public class AlternativeModel {
     private String file;
 
     @Column(name = "isCorrect")
+    @NotNull
     private boolean isCorrect;
 }
