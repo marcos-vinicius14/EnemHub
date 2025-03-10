@@ -58,7 +58,7 @@ public class QuestionModel {
     @Column(name = "alternativesIntroduction")
     private String alternativesIntroduction;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id")
+    //@JoinColumn(name = "question_id")
+    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL)
     private List<AlternativeModel> alternatives;
 }
