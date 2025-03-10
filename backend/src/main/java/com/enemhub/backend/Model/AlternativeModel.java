@@ -45,4 +45,8 @@ public class AlternativeModel {
     @Column(name = "isCorrect")
     @NotNull
     private boolean isCorrect;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "questions_id", nullable = false)
+    private QuestionModel question;
 }
