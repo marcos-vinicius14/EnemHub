@@ -84,4 +84,4 @@ npm run dev
  - Acompanhar Progresso: Monitore seu desempenho e identifique áreas que precisam de mais estudo.
 
 ## Licença
-Este projeto é licenciado sob a MIT License.
+Este projeto é licenciado sob a GPL V2 License.
