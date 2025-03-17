@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/local_db}
+    username: ${POSTGRES_USER:local_user}
+    password: ${POSTGRES_PASSWORD:local_password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    locations: classpath:db/migration
