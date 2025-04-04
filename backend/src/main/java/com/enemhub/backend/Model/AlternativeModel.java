@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.Objects;
 
 /**
  * The AlternativeModel class serves as an entity representing an alternative for a question
@@ -33,7 +34,6 @@ public class AlternativeModel {
     private Long id;
 
     @Column(name = "letter")
-    @NotNull
     private String letter;
 
     @Column(length = 2000, name = "text")
@@ -42,11 +42,22 @@ public class AlternativeModel {
     @Column(name = "file")
     private String file;
 
-    @Column(name = "isCorrect")
-    @NotNull
+    @Column(name = "is_correct")
     private boolean isCorrect;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "questions_id", nullable = false)
     private QuestionModel question;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        AlternativeModel that = (AlternativeModel) o;
+        return isCorrect == that.isCorrect && Objects.equals(id, that.id) && Objects.equals(letter, that.letter) && Objects.equals(text, that.text) && Objects.equals(file, that.file) && Objects.equals(question, that.question);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, letter, text, file, isCorrect, question);
+    }
 }

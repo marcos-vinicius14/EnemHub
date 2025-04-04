@@ -13,4 +13,5 @@ public record QuestionDTO(
         String context,
         String correctAlternative,
         String alternativesIntroduction,
-        List<AlternativeDTO> alternatives) {}
+        List<AlternativeDTO> alternatives) {
+}
