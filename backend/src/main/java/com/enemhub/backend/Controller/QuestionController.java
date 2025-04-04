@@ -1,31 +1,28 @@
 package com.enemhub.backend.Controller;
 
-import com.enemhub.backend.DTO.LoadQuestionDTO;
-import com.enemhub.backend.Model.QuestionModel;
+import com.enemhub.backend.DTO.QuestionDTO;
 import com.enemhub.backend.Service.QuestionService;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("/question")
+@RequestMapping("v1/questions")
 public class QuestionController {
     private final QuestionService questionService;
 
-    @Autowired
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
-    @PostMapping("/load-question")
+    @PostMapping("/load-questions")
     public ResponseEntity<String> loadQuestionDetails(@RequestBody String request)  {
         try {
             JSONObject jsonObject = new JSONObject(request);
@@ -37,5 +34,18 @@ public class QuestionController {
         }
     }
 
+    @GetMapping("/{year}")
+    public ResponseEntity<Page<QuestionDTO>> getQuestionsByYear(
+            @PathVariable int year,
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
+        Page<QuestionDTO> questionsByYear = questionService.findQuestionsByYear(year, pageable);
+
+        if (questionsByYear.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(questionsByYear);
+
+    }
 }

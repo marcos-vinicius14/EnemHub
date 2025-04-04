@@ -1,58 +1,31 @@
 package com.enemhub.backend.Service;
 
-import com.enemhub.backend.DTO.LoadQuestionDTO;
+import com.enemhub.backend.DTO.QuestionDTO;
+import com.enemhub.backend.Mapper.QuestionMapper;
 import com.enemhub.backend.Model.AlternativeModel;
 import com.enemhub.backend.Model.QuestionModel;
 import com.enemhub.backend.Repository.AlternativeRepository;
 import com.enemhub.backend.Repository.QuestionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final AlternativeRepository alternativeRepository;
     private final ObjectMapper objectMapper;
     private final PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-
-    public QuestionService(QuestionRepository questionRepository, AlternativeRepository alternativeRepository, ObjectMapper objectMapper) {
-        this.questionRepository = questionRepository;
-        this.alternativeRepository = alternativeRepository;
-        this.objectMapper = objectMapper;
-    }
-
-    // Método original mantido para compatibilidade, se necessário
-    public void loadQuestionDetails(LoadQuestionDTO loadQuestionDTO) throws Exception {
-        String filePathWithoutLanguage = String.format("public/%s/questions/%s/details.json", loadQuestionDTO.year(), loadQuestionDTO.index());
-        String filePathWithLanguage = String.format("public/%s/questions/%s-%s/details.json", loadQuestionDTO.year(), loadQuestionDTO.index(), loadQuestionDTO.language());
-
-        System.out.println(" ################## " + filePathWithoutLanguage + " or " + filePathWithLanguage + " #########");
-        ClassPathResource resource = new ClassPathResource(filePathWithoutLanguage);
-
-        if (!resource.exists()) {
-            resource = new ClassPathResource(filePathWithLanguage);
-            if (!resource.exists()) {
-                throw new IOException("File not found: " + filePathWithoutLanguage + " or " + filePathWithLanguage);
-            }
-        }
-
-        try (InputStream inputStream = resource.getInputStream()) {
-            QuestionModel question = objectMapper.readValue(inputStream, QuestionModel.class);
-            questionRepository.save(question);
-        } catch (IOException e) {
-            throw new IOException("Error reading file: " + resource.getPath(), e);
-        }
-    }
-
 
     public void loadAllQuestionsForYear(String year) throws Exception {
         // Define o padrão de busca para os arquivos
@@ -66,14 +39,12 @@ public class QuestionService {
             throw new RuntimeException("Nenhuma questão encontrada para o ano " + year);
         }
 
-        // Processa os arquivos encontrados
         for (Resource resource : resources) {
             try (InputStream inputStream = resource.getInputStream()) {
                 QuestionModel question = objectMapper.readValue(inputStream, QuestionModel.class);
 
-                //TODO: Salva as questões, sem alternativas, para gerar o ID.
                 List<AlternativeModel> alternativesTemp = question.getAlternatives();
-                question.setAlternatives(null); //TODO: Remove as alternativas temporariamente
+                question.setAlternatives(null);
 
                 QuestionModel savedQuestion = questionRepository.save(question);
 
@@ -89,6 +60,18 @@ public class QuestionService {
                 System.err.println("Erro ao processar " + resource.getFilename() + ": " + e.getMessage() + pattern);
             }
         }
+    }
+
+    @Transactional
+    public Page<QuestionDTO> findQuestionsByYear(int year, Pageable pageable) {
+        Page<QuestionModel> questions = questionRepository.findQuestionModelByYear(year, pageable);
+
+        if (questions.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList());
+        }
+
+        return questions.map(QuestionMapper::toDTO);
+
     }
 
 }

@@ -4,10 +4,12 @@ package com.enemhub.backend.Model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -52,13 +54,13 @@ public class QuestionModel {
     @Column(length = 5000, name = "context")
     private String context;
 
-    @Column(name = "correctAlternative")
+    @Column(name = "correct_alternative")
     private String correctAlternative;
 
-    @Column(name = "alternativesIntroduction")
+    @Column(name = "alternatives_introduction")
     private String alternativesIntroduction;
 
     //@JoinColumn(name = "question_id")
-    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AlternativeModel> alternatives;
 }
